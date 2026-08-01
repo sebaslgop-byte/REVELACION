@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>¡Nuestra Gran Revelación! ✨</title>
-    <!-- Librería para fuegos artificiales y confeti -->
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
     <style>
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
@@ -20,6 +19,56 @@
             padding: 20px;
         }
 
+        /* Capa para desbloquear el audio al primer toque */
+        #unlock-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.75);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            z-index: 9999;
+            color: white;
+            text-align: center;
+            padding: 20px;
+            cursor: pointer;
+        }
+
+        .unlock-box {
+            background: white;
+            color: #333;
+            padding: 30px;
+            border-radius: 20px;
+            max-width: 400px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+        }
+
+        .unlock-box h2 {
+            margin-bottom: 10px;
+            color: #007bff;
+        }
+
+        .unlock-box p {
+            margin-bottom: 20px;
+            font-size: 1rem;
+            color: #555;
+        }
+
+        .unlock-btn {
+            background: #007bff;
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            font-size: 1.1rem;
+            border-radius: 50px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
         .container {
             background: white;
             padding: 30px;
@@ -30,7 +79,6 @@
             width: 100%;
             position: relative;
             z-index: 10;
-            overflow: hidden;
         }
 
         h1 {
@@ -38,7 +86,6 @@
             color: #555;
             margin-bottom: 20px;
             font-weight: 300;
-            letter-spacing: 1px;
         }
 
         .photo-container {
@@ -47,7 +94,6 @@
             border-radius: 15px;
             margin-bottom: 25px;
             box-shadow: 0 10px 25px rgba(0,0,0,0.1);
-            position: relative;
             overflow: hidden;
             border: 5px solid #fff;
         }
@@ -56,15 +102,10 @@
             width: 100%;
             height: 100%;
             object-fit: cover;
-            transition: transform 0.5s ease;
-        }
-
-        .photo-container:hover img {
-            transform: scale(1.05);
         }
 
         .reveal-btn {
-            background: linear-gradient(to right, #ff758c 0%, #ff7eb3 100%);
+            background: linear-gradient(to right, #007bff 0%, #4da6ff 100%);
             border: none;
             color: white;
             padding: 18px 35px;
@@ -72,16 +113,10 @@
             font-weight: 600;
             border-radius: 50px;
             cursor: pointer;
-            box-shadow: 0 8px 20px rgba(255, 117, 140, 0.4);
-            transition: all 0.3s ease;
+            box-shadow: 0 8px 20px rgba(0, 123, 255, 0.4);
             text-transform: uppercase;
             letter-spacing: 1.5px;
             width: 100%;
-        }
-
-        .reveal-btn:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 12px 25px rgba(255, 117, 140, 0.6);
         }
 
         #result-container {
@@ -94,15 +129,13 @@
             font-size: 2.8rem;
             font-weight: 800;
             text-transform: uppercase;
-            letter-spacing: 2px;
             margin-bottom: 10px;
-            text-shadow: 0 2px 5px rgba(0,0,0,0.2);
+            color: #007bff;
         }
 
         .result-message {
-            font-size: 1.2rem;
+            font-size: 1.1rem;
             color: #555;
-            font-weight: 400;
             line-height: 1.5;
             margin-top: 15px;
             font-style: italic;
@@ -118,22 +151,6 @@
             100% { transform: scale(1); opacity: 1; }
         }
 
-        .floating-balloon {
-            position: absolute;
-            bottom: -150px;
-            width: 50px;
-            height: 65px;
-            border-radius: 50%;
-            opacity: 0.6;
-            animation: float linear infinite;
-            z-index: 1;
-        }
-
-        @keyframes float {
-            0% { transform: translateY(0) rotate(0deg); }
-            100% { transform: translateY(-120vh) rotate(360deg); }
-        }
-
         footer {
             margin-top: 30px;
             font-size: 0.9rem;
@@ -143,10 +160,18 @@
 </head>
 <body>
 
+    <!-- CARTEL INICIAL PARA ACTIVAR LA MÚSICA AL ABRIR -->
+    <div id="unlock-overlay" onclick="comenzarExperiencia()">
+        <div class="unlock-box">
+            <h2>✨ ¡Preparate para la gran noticia! ✨</h2>
+            <p>Hacé clic aquí para entrar y activar la música de la revelación.</p>
+            <button class="unlock-btn">Entrar a la Página 🎵</button>
+        </div>
+    </div>
+
     <div class="container">
         <h1>✨ ¿Quién viene a alegrar nuestras vidas? ✨</h1>
 
-        <!-- FOTO EXACTA SEGÚN TU CAPTURA -->
         <div class="photo-container">
             <img src="foto.jpeg" alt="Nuestra foto familiar esperando al bebé">
         </div>
@@ -156,8 +181,10 @@
         </button>
 
         <div id="result-container">
-            <div class="result-title" id="resultText"></div>
-            <p class="result-message" id="resultMessage"></p>
+            <div class="result-title" id="resultText">¡ES UN VARÓN! 💙</div>
+            <p class="result-message" id="resultMessage">
+                "Tanto te pedimos, tanto te soñamos... y hoy la vida nos regala la bendición de tenerte. ¡Bienvenido a nuestra familia, pequeño gran amor! Tu mamá, tu papá y tu hermana te esperan con el corazón desbordado de felicidad." 💙🍼
+            </p>
         </div>
     </div>
 
@@ -165,44 +192,36 @@
         Con todo nuestro amor para la familia ❤️
     </footer>
 
-    <!-- AUDIO EXACTO SEGÚN TU CAPTURA -->
-    <audio id="revealAudio" preload="auto">
+    <!-- AUDIO -->
+    <audio id="revealAudio" loop preload="auto">
         <source src="cancion.mp3" type="audio/mpeg">
         Tu navegador no soporta el elemento de audio.
     </audio>
 
     <script>
-        // CONFIGURADO PARA NENE (VARÓN)
-        const GENERO_BEBE = 'NINO'; 
+        const audio = document.getElementById('revealAudio');
+
+        function comenzarExperiencia() {
+            // Reproduce la música de fondo en cuanto la persona hace clic en el cartel de bienvenida
+            audio.play().then(() => {
+                // Oculta el cartel de bienvenida con una suave transición
+                const overlay = document.getElementById('unlock-overlay');
+                overlay.style.opacity = '0';
+                setTimeout(() => overlay.style.display = 'none', 500);
+            }).catch(e => {
+                console.log("Audio play blocked:", e);
+            });
+        }
 
         function iniciarRevelacion() {
             document.getElementById('revealBtn').style.display = 'none';
             document.querySelector('.container h1').innerText = "¡El gran momento llegó!";
+            
+            // Muestra el resultado de inmediato con su animación
+            document.getElementById('result-container').style.display = 'block';
 
-            var audio = document.getElementById('revealAudio');
-            audio.currentTime = 0;
-            audio.play().catch(e => console.error("Error al reproducir audio:", e));
-
-            const resultContainer = document.getElementById('result-container');
-            resultContainer.style.display = 'block';
-
-            let colorFuegos1, colorFuegos2, textoFinal, mensajeFinal, colorTexto;
-
-            if (GENERO_BEBE === 'NINO') {
-                colorFuegos1 = '#007bff';
-                colorFuegos2 = '#4da6ff';
-                textoFinal = "¡ES UN VARÓN! 💙";
-                colorTexto = "#007bff";
-                // Dedicatoria súper tierna integrada
-                mensajeFinal = "\"Tanto te pedimos, tanto te soñamos... y hoy la vida nos regala la bendición de tenerte. ¡Bienvenido a nuestra familia, pequeño gran amor! Tu mamá, tu papá y tu hermana te esperan con el corazón desbordado de felicidad.\" 💙🍼";
-                generarGlobos('#007bff');
-            }
-
-            document.getElementById('resultText').innerText = textoFinal;
-            document.getElementById('resultText').style.color = colorTexto;
-            document.getElementById('resultMessage').innerText = mensajeFinal;
-
-            lanzarFuegos(colorFuegos1, colorFuegos2);
+            // Dispara fuegos artificiales
+            lanzarFuegos('#007bff', '#4da6ff');
         }
 
         function lanzarFuegos(color1, color2) {
@@ -221,25 +240,6 @@
             fire(0.35, { spread: 100, decay: 0.91, scalar: 0.8 });
             fire(0.1, { spread: 120, startVelocity: 25, decay: 0.92, scalar: 1.2 });
             fire(0.1, { spread: 120, startVelocity: 45 });
-
-            setTimeout(() => {
-                confetti({ particleCount: 100, angle: 60, spread: 80, origin: { x: 0, y: 0.8 }, colors: [color1, color2] });
-                confetti({ particleCount: 100, angle: 120, spread: 80, origin: { x: 1, y: 0.8 }, colors: [color1, color2] });
-            }, 500);
-        }
-
-        function generarGlobos(colorBase) {
-            for (let i = 0; i < 15; i++) {
-                setTimeout(() => {
-                    const balloon = document.createElement('div');
-                    balloon.className = 'floating-balloon';
-                    balloon.style.left = Math.random() * 100 + 'vw';
-                    balloon.style.backgroundColor = colorBase;
-                    balloon.style.animationDuration = (Math.random() * 3 + 5) + 's';
-                    document.body.appendChild(balloon);
-                    setTimeout(() => balloon.remove(), 8000);
-                }, i * 300);
-            }
         }
     </script>
 </body>
