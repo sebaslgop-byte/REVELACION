@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>¡Nuestra Gran Revelación! ✨</title>
+    <!-- Librería para fuegos artificiales y confeti -->
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+
+        body {
+            background: linear-gradient(135deg, #fdfbfb 0%, #ebedee 100%);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            color: #333;
+            padding: 20px;
+        }
+
+        .container {
+            background: white;
+            padding: 30px;
+            border-radius: 25px;
+            box-shadow: 0 15px 50px rgba(0,0,0,0.15);
+            text-align: center;
+            max-width: 550px;
+            width: 100%;
+            position: relative;
+            z-index: 10;
+            overflow: hidden;
+        }
+
+        h1 {
+            font-size: 1.8rem;
+            color: #555;
+            margin-bottom: 20px;
+            font-weight: 300;
+            letter-spacing: 1px;
+        }
+
+        .photo-container {
+            width: 100%;
+            height: 350px;
+            border-radius: 15px;
+            margin-bottom: 25px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+            position: relative;
+            overflow: hidden;
+            border: 5px solid #fff;
+        }
+
+        .photo-container img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s ease;
+        }
+
+        .photo-container:hover img {
+            transform: scale(1.05);
+        }
+
+        .reveal-btn {
+            background: linear-gradient(to right, #ff758c 0%, #ff7eb3 100%);
+            border: none;
+            color: white;
+            padding: 18px 35px;
+            font-size: 1.3rem;
+            font-weight: 600;
+            border-radius: 50px;
+            cursor: pointer;
+            box-shadow: 0 8px 20px rgba(255, 117, 140, 0.4);
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            width: 100%;
+        }
+
+        .reveal-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 25px rgba(255, 117, 140, 0.6);
+        }
+
+        #result-container {
+            display: none;
+            margin-top: 30px;
+            animation: popIn 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        .result-title {
+            font-size: 2.8rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 10px;
+            text-shadow: 0 2px 5px rgba(0,0,0,0.2);
+        }
+
+        .result-message {
+            font-size: 1.2rem;
+            color: #555;
+            font-weight: 400;
+            line-height: 1.5;
+            margin-top: 15px;
+            font-style: italic;
+            background: #f0f7ff;
+            padding: 15px;
+            border-radius: 10px;
+            border-left: 4px solid #007bff;
+        }
+
+        @keyframes popIn {
+            0% { transform: scale(0); opacity: 0; }
+            80% { transform: scale(1.1); }
+            100% { transform: scale(1); opacity: 1; }
+        }
+
+        .floating-balloon {
+            position: absolute;
+            bottom: -150px;
+            width: 50px;
+            height: 65px;
+            border-radius: 50%;
+            opacity: 0.6;
+            animation: float linear infinite;
+            z-index: 1;
+        }
+
+        @keyframes float {
+            0% { transform: translateY(0) rotate(0deg); }
+            100% { transform: translateY(-120vh) rotate(360deg); }
+        }
+
+        footer {
+            margin-top: 30px;
+            font-size: 0.9rem;
+            color: #aaa;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1>✨ ¿Quién viene a alegrar nuestras vidas? ✨</h1>
+
+        <!-- FOTO EXACTA SEGÚN TU CAPTURA -->
+        <div class="photo-container">
+            <img src="foto.jpeg" alt="Nuestra foto familiar esperando al bebé">
+        </div>
+
+        <button class="reveal-btn" id="revealBtn" onclick="iniciarRevelacion()">
+            ▶️ Descubrir el Gran Secreto 🍼
+        </button>
+
+        <div id="result-container">
+            <div class="result-title" id="resultText"></div>
+            <p class="result-message" id="resultMessage"></p>
+        </div>
+    </div>
+
+    <footer>
+        Con todo nuestro amor para la familia ❤️
+    </footer>
+
+    <!-- AUDIO EXACTO SEGÚN TU CAPTURA -->
+    <audio id="revealAudio" preload="auto">
+        <source src="canción.mp3" type="audio/mpeg">
+        Tu navegador no soporta el elemento de audio.
+    </audio>
+
+    <script>
+        // CONFIGURADO PARA NENE (VARÓN)
+        const GENERO_BEBE = 'NINO'; 
+
+        function iniciarRevelacion() {
+            document.getElementById('revealBtn').style.display = 'none';
+            document.querySelector('.container h1').innerText = "¡El gran momento llegó!";
+
+            var audio = document.getElementById('revealAudio');
+            audio.currentTime = 0;
+            audio.play().catch(e => console.error("Error al reproducir audio:", e));
+
+            const resultContainer = document.getElementById('result-container');
+            resultContainer.style.display = 'block';
+
+            let colorFuegos1, colorFuegos2, textoFinal, mensajeFinal, colorTexto;
+
+            if (GENERO_BEBE === 'NINO') {
+                colorFuegos1 = '#007bff';
+                colorFuegos2 = '#4da6ff';
+                textoFinal = "¡ES UN VARÓN! 💙";
+                colorTexto = "#007bff";
+                // Dedicatoria súper tierna integrada
+                mensajeFinal = "\"Tanto te pedimos, tanto te soñamos... y hoy la vida nos regala la bendición de tenerte. ¡Bienvenido a nuestra familia, pequeño gran amor! Tu mamá, tu papá y tu hermana te esperan con el corazón desbordado de felicidad.\" 💙🍼";
+                generarGlobos('#007bff');
+            }
+
+            document.getElementById('resultText').innerText = textoFinal;
+            document.getElementById('resultText').style.color = colorTexto;
+            document.getElementById('resultMessage').innerText = mensajeFinal;
+
+            lanzarFuegos(colorFuegos1, colorFuegos2);
+        }
+
+        function lanzarFuegos(color1, color2) {
+            var count = 200;
+            var defaults = { origin: { y: 0.6 } };
+
+            function fire(particleRatio, opts) {
+                confetti(Object.assign({}, defaults, opts, {
+                    particleCount: Math.floor(count * particleRatio),
+                    colors: [color1, color2, '#ffffff', '#ffd700']
+                }));
+            }
+
+            fire(0.25, { spread: 26, startVelocity: 55 });
+            fire(0.2, { spread: 60 });
+            fire(0.35, { spread: 100, decay: 0.91, scalar: 0.8 });
+            fire(0.1, { spread: 120, startVelocity: 25, decay: 0.92, scalar: 1.2 });
+            fire(0.1, { spread: 120, startVelocity: 45 });
+
+            setTimeout(() => {
+                confetti({ particleCount: 100, angle: 60, spread: 80, origin: { x: 0, y: 0.8 }, colors: [color1, color2] });
+                confetti({ particleCount: 100, angle: 120, spread: 80, origin: { x: 1, y: 0.8 }, colors: [color1, color2] });
+            }, 500);
+        }
+
+        function generarGlobos(colorBase) {
+            for (let i = 0; i < 15; i++) {
+                setTimeout(() => {
+                    const balloon = document.createElement('div');
+                    balloon.className = 'floating-balloon';
+                    balloon.style.left = Math.random() * 100 + 'vw';
+                    balloon.style.backgroundColor = colorBase;
+                    balloon.style.animationDuration = (Math.random() * 3 + 5) + 's';
+                    document.body.appendChild(balloon);
+                    setTimeout(() => balloon.remove(), 8000);
+                }, i * 300);
+            }
+        }
+    </script>
+</body>
+</html>
